@@ -28,14 +28,17 @@ This Streamlit application allows users to upload PDF documents and ask question
    git clone https://github.com/yourusername/your-repo-name.git
    cd your-repo-name
 2. Install the required libraries:
-  pip install -r requirements.txt
+   ```bash
+   pip install -r requirements.txt
 
 5. Set up environment variables. Create a .env file in the root directory and add your API keys:
-  PINECONE_API_KEY=your_pinecone_api_key
-  COHERE_API_KEY=your_cohere_api_key
+   ```bash
+   PINECONE_API_KEY=your_pinecone_api_key
+   COHERE_API_KEY=your_cohere_api_key
 
 # Usage:
    Run the app:
+   
     streamlit run app.py
 
   Open your web browser and navigate to http://localhost:8501.

@@ -1,9 +1,9 @@
-langchain==0.0.184
-PyPDF2==3.0.1
-streamlit==1.18.1
+streamlit
 pinecone-client
 cohere
+PyPDF2
+langchain==0.0.184
 transformers
-torch
---upgrade pip
-tensorflow
+datasets
+tensorflow  # or torch
+numpy==1.24.4

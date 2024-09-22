@@ -1,0 +1,7 @@
+langchain==0.0.184
+PyPDF2==3.0.1
+streamlit==1.18.1
+pinecone-client
+cohere
+transformers
+datasets

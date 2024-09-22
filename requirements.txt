@@ -6,3 +6,4 @@ cohere
 transformers
 datasets
 pytorch
+--upgrade pip

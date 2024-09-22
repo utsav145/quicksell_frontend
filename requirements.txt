@@ -1,7 +1,7 @@
 streamlit
 tokenizers
 cohere
-pinecone-client
+pinecone
 PyPDF2
 langchain
 transformers

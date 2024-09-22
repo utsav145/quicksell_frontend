@@ -6,4 +6,5 @@ langchain
 transformers
 numpy<2,>=1
 tensorflow
+tf-keras
   # Adjust the version if needed, e.g., torch==2.0.0

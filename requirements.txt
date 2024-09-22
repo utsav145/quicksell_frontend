@@ -7,4 +7,4 @@ transformers
 datasets
 tensorflow  # or torch
 numpy==1.24.4
-pip>=24.2
+pip==24.2

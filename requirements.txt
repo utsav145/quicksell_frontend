@@ -1,9 +1,7 @@
 streamlit==1.18.1
-pinecone-client
-cohere
-PyPDF2
+cohere==3.0.1  # or the latest compatible version
+pinecone-client==2.2.0  # or the latest compatible version
+PyPDF2==2.12.0  # or the latest compatible version
 langchain==0.0.184
-transformers
-datasets
-tensorflow==2.12.0  # or use torch if that's your preference
-numpy<2,>=1
+transformers==4.31.0  # or the latest compatible version
+numpy<2,>=1  # Ensure compatibility with langchain

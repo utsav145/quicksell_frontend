@@ -1,5 +1,4 @@
 pip==24.2
-streamlit
 pinecone-client
 cohere
 PyPDF2

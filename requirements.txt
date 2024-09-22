@@ -1,8 +1,8 @@
-streamlit==1.22.0
-tokenizers==0.13.3  # Compatible with transformers
-cohere==3.1.0
-pinecone-client==2.3.0
-PyPDF2==3.0.1
-langchain==0.0.204
-transformers==4.31.0  # Keep this version as it's compatible with the tokenizers specified
-numpy<2,>=1.24.3
+streamlit==1.18.1
+tokenizers==0.13.3
+cohere==3.0.1  # or the latest compatible version
+pinecone-client==2.2.0  # or the latest compatible version
+PyPDF2==2.12.0  # or the latest compatible version
+langchain==0.0.184
+transformers==4.31.0  # or the latest compatible version
+numpy<2,>=1  # Ensure compatibility with langchain

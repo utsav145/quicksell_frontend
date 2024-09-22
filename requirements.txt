@@ -1,9 +1,9 @@
-pip==24.2
+streamlit==1.18.1
 pinecone-client
 cohere
 PyPDF2
 langchain==0.0.184
 transformers
 datasets
-tensorflow  # or torch
-numpy==1.24.4
+tensorflow==2.12.0  # or use torch if that's your preference
+numpy<2,>=1

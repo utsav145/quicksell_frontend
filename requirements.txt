@@ -4,7 +4,6 @@ streamlit==1.18.1
 pinecone-client
 cohere
 transformers
-datasets
-pytorch
+torch
 --upgrade pip
 tensorflow

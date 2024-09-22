@@ -6,3 +6,4 @@ PyPDF2
 langchain
 transformers
 numpy<2,>=1
+torch  # Adjust the version if needed, e.g., torch==2.0.0

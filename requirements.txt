@@ -7,3 +7,4 @@ transformers
 datasets
 pytorch
 --upgrade pip
+tensorflow

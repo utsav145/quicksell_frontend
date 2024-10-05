@@ -3,7 +3,7 @@ cohere
 pinecone
 PyPDF2
 langchain
-transformers==4.25.1
+transformers
 numpy<2,>=1
 tensorflow
 torch

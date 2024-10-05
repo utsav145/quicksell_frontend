@@ -30,8 +30,11 @@ if index_name not in pc.list_indexes().names():
 
 index = pc.Index(index_name)
 
-# Load the larger QA model for better answers
-qa_model = pipeline("question-answering", model="deepset/roberta-large-squad2")
+try:
+    qa_model = pipeline("question-answering", model="deepset/roberta-large-squad2")
+    print("Model loaded successfully!")
+except Exception as e:
+    print(f"Error loading model: {e}")
 
 
 # Function to preprocess text

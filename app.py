@@ -1,4 +1,4 @@
-# app.py
+#app.py
 import streamlit as st
 from model1 import process_pdf, embed_and_store_text, similarity_search, extract_answer
 from langchain.text_splitter import CharacterTextSplitter

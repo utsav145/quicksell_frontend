@@ -6,5 +6,6 @@ langchain
 transformers
 numpy<2,>=1
 tensorflow
+tensorRT
 tf-keras
 

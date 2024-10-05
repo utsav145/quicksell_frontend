@@ -4,7 +4,7 @@ pinecone
 PyPDF2
 langchain
 transformers
-
+numpy<2,>=1
 tensorflow
 tf-keras
 

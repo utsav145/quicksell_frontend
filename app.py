@@ -40,9 +40,19 @@ if uploaded_file is not None:
 # User input for query
 query = st.text_input("Enter your question here:")
 
+# Display the answer if query is provided
 if query:
     with st.spinner("Searching for the answer..."):
-       
+        docs = similarity_search(query)
+        
+        if docs:
+            answer = extract_answer(query, docs)
+            if answer:
+                st.success(f"Answer: {answer}")
+            else:
+                st.error("Sorry, I can't find the answer to your question.")
+        else:
+            st.warning("No matching documents found.")
 
 
 

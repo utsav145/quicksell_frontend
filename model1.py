@@ -1,4 +1,3 @@
-# model.py
 import os
 import re
 import cohere
@@ -6,13 +5,15 @@ from pinecone import Pinecone, ServerlessSpec
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 from transformers import pipeline
+import logging
+from concurrent.futures import ThreadPoolExecutor
 
-# Initialize Cohere client
-cohere_api_key = "Vfrg0t3eibW8K8QCYyBcKzTho7dZIcYxGFHCrcm7"  # Replace with your actual API key
+# Initialize Cohere client securely
+cohere_api_key = os.getenv("COHERE_API_KEY")  # Get from environment
 co = cohere.Client(cohere_api_key)
 
-# Initialize Pinecone with API key and environment
-pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY", "b4026b13-3fd6-4aea-bf3d-7e33f330a885"))
+# Initialize Pinecone
+pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 index_name = 'cohere-small-embeddings'
 embedding_dimension = 4096  # Update this to match the dimension from Cohere
 
@@ -22,20 +23,17 @@ if index_name not in pc.list_indexes().names():
         name=index_name,
         dimension=embedding_dimension,
         metric='cosine',
-        spec=ServerlessSpec(
-            cloud='aws',
-            region='us-east-1'
-        )
+        spec=ServerlessSpec(cloud='aws', region='us-east-1')
     )
 
 index = pc.Index(index_name)
 
+# Load QA model with exception handling
 try:
     qa_model = pipeline("question-answering", model="deepset/roberta-large-squad2")
-    print("Model loaded successfully!")
+    logging.info("Model loaded successfully!")
 except Exception as e:
-    print(f"Error loading model: {e}")
-
+    logging.error(f"Error loading model: {e}")
 
 # Function to preprocess text
 def preprocess_text(text):
@@ -44,36 +42,29 @@ def preprocess_text(text):
     text = ''.join(filter(lambda x: x.isprintable(), text))
     return text.strip()
 
-# Function to perform similarity search using Pinecone
-def similarity_search(query, top_k=10):
-    query_embedding = co.embed(texts=[query]).embeddings[0]
-    results = index.query(
-        vector=query_embedding,
-        top_k=top_k,
-        include_metadata=True
-    )
-    return results['matches']
+def embed_and_store_text_parallel(texts):
+    with ThreadPoolExecutor() as executor:
+        executor.map(store_embedding_in_pinecone, texts)
 
-# Function to extract relevant answer from text
-def extract_answer(query, texts):
-    context = " ".join(text['metadata']['text'] for text in texts)
-    result = qa_model(question=query, context=context, max_length=1000, min_length=100)
-    return result['answer']
+def store_embedding_in_pinecone(chunk, i):
+    embedding = co.embed(texts=[chunk]).embeddings[0]
+    metadata = {'text': chunk}
+    index.upsert(vectors=[(f"doc_{i}", embedding, metadata)])
 
-# Function to process the uploaded PDF
+# Function to process PDF
 def process_pdf(uploaded_file):
-    reader = PdfReader(uploaded_file)
-    raw_text = ''
-    for page in reader.pages:
-        text = page.extract_text()
-        if text:
-            raw_text += text
-    return preprocess_text(raw_text)
+    try:
+        reader = PdfReader(uploaded_file)
+        raw_text = ''
+        for page in reader.pages:
+            text = page.extract_text()
+            if text:
+                raw_text += text
+        if not raw_text.strip():
+            raise ValueError("No readable text found in the uploaded PDF.")
+        return preprocess_text(raw_text)
+    except Exception as e:
+        logging.error(f"Error processing PDF: {e}")
+        return None
 
-# Function to embed text chunks and store them in Pinecone
-def embed_and_store_text(texts):
-    for i, chunk in enumerate(texts):
-        embedding = co.embed(texts=[chunk]).embeddings[0]
-        metadata = {'text': chunk}
-        index.upsert(vectors=[(f"doc_{i}", embedding, metadata)])
 

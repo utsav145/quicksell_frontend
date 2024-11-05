@@ -1,5 +1,6 @@
+# app.py
 import streamlit as st
-from model import process_pdf, embed_and_store_text_parallel, similarity_search, extract_answer
+from model1 import process_pdf, embed_and_store_text, similarity_search, extract_answer
 from langchain.text_splitter import CharacterTextSplitter
 
 # Apply custom CSS for a prettier UI
@@ -26,27 +27,26 @@ st.title('📄 Interactive QA Bot with Document Upload')
 st.markdown("This app allows you to upload a PDF document and ask questions based on its content.")
 
 # File uploader for PDFs
+st.markdown("### Upload your PDF document here:")
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
-# Process and store the PDF in Pinecone
+# Check if a file is uploaded
 if uploaded_file is not None:
     st.markdown("<p class='uploaded_file_info'>File uploaded successfully. Processing...</p>", unsafe_allow_html=True)
     
-    # Process the uploaded PDF (preprocessing is applied here)
+    # Process the uploaded PDF
     raw_text = process_pdf(uploaded_file)
+
+    # Adjust chunk size and overlap for better context coverage
+    textsplitter = CharacterTextSplitter(separator="\n", chunk_size=5000, chunk_overlap=500)
+    texts = textsplitter.split_text(raw_text)
     
-    if raw_text:  # If preprocessing was successful
-        # Split the text into chunks
-        textsplitter = CharacterTextSplitter(separator="\n", chunk_size=5000, chunk_overlap=500)
-        texts = textsplitter.split_text(raw_text)
-        
-        # Embed the text chunks and store them in Pinecone
-        progress = st.progress(0)
-        embed_and_store_text_parallel(texts)
-        st.success("PDF processed and stored in Pinecone.")
-        st.progress(100)
-    else:
-        st.error("Failed to process PDF.")
+    # Embed the text chunks and store them in Pinecone
+    progress = st.progress(0)
+    embed_and_store_text(texts)
+    st.success("PDF processed and stored in Pinecone.")
+else:
+    st.warning("Please upload a PDF document to begin.")
 
 # User input for query
 st.markdown("### Ask a question:")
